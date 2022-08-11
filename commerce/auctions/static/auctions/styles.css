@@ -1,0 +1,41 @@
+body {
+    padding: 10px;
+}
+
+.auction-data {
+    margin-top: 5em;
+}
+
+.comment-portrait {
+    width:60px
+}
+
+.media {
+    margin-top: 20px
+}
+
+.comment-submit {
+    margin-top: 1em;
+}
+
+.close-auction {
+    margin-top: 1em;
+}
+
+.comment-title {
+    margin-top: 5em
+}
+
+.auction-image.thumbnail {
+    max-width: 200px;
+    max-height: 300px;
+}
+
+.auction-listing {
+    margin: 0 5em 0 5em
+}
+
+.auction-image {
+    max-width: 600px;
+    max-height: 600px;
+}

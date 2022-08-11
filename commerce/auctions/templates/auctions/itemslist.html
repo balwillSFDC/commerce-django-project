@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <img class="auction-image thumbnail rounded float-left" src="{{ listing.image }}">
+    </div>
+    <div class="col-md-5 auction-detail">
+        <a href="{% url 'listing' listing.id %}"><h3 class="auction-title">{{listing.title}}</h3></a>
+        
+        <b><p>Current Bidding Price:</b> ${% if listing.highest_bid == None %}{{listing.starting_bid}}{% else %}{{listing.highest_bid}} {% endif %}</p>
+        <p>{{listing.description}}</p>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+<hr>

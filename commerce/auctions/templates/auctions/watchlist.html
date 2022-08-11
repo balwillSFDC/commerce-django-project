@@ -1,0 +1,11 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if watchlist.count > 0 %}
+        {% for listing in watchlist %}
+            {% include "auctions/itemslist.html" %}
+        {% endfor %}
+    {% else %}
+        You currently have no items in your watchlist
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% for listing in listings %}
+        {% if listing.isActive == True %}
+            {% include "auctions/itemslist.html" %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

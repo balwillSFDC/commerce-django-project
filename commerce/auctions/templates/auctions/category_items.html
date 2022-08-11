@@ -1,0 +1,11 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if category_items.count > 0 %}
+        {% for listing in category_items %}
+            {% include "auctions/itemslist.html" %}
+        {% endfor %}
+    {% else %}
+        There are currently no items in this category
+    {% endif %}
+{% endblock %}

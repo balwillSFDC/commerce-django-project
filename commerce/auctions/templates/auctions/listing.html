@@ -1,0 +1,128 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+{% if listing.isActive == False %}
+    <div class="alert alert-info">
+        This Auction has closed as of {{ listing.closed_date }}
+    </div>
+    {% if listing.winner == user %}
+    <div class="alert alert-success">
+        Congrats! You won the auction for this item!
+    </div>
+    {% endif %}
+{% endif %}
+<div class="auction-listing">
+    <div class="row align-items-center">
+        <div class="col-xl-6">
+            <img class="auction-image rounded mx-auto d-block" src="{{ listing.image }}">
+        </div>
+        <div class="col-xl-6 auction-data">
+            <h3 class="auction-title">{{listing.title}}</h3>
+            <hr>
+            <h4>Details</h4>
+            {% if bids.count > 0 %}
+            <p>Highest Bid: ${{ highest_bid.amount }}</p>
+            {% endif %}
+            <p>Starting Bid: ${{listing.starting_bid}}</p>
+            <p>Bids Placed: {{ bids.count }}</p>
+            <p>Owner: {{listing.owner}}</p>
+            <p>People Watching: {{ listing.people_watching.count }}</p>
+            <p>{{listing.description}}</p>
+            {% if user.is_authenticated %}
+                <form action="{% url 'listing' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    {% if user in listing.people_watching.all %}
+                        <input name="add_to_watchlist" value="False" hidden>
+                        <input class="btn btn-danger" type="submit" value="Remove from Watchlist">
+                    {% else %}
+                        <input name="add_to_watchlist" value="True" hidden>
+                        <input class="btn btn-primary" type="submit" value="Add to Watchlist">
+                    {% endif %}
+
+                    <!-- {% if user != listing.owner %} -->
+                    <!-- {% endif %} -->
+
+                </form> 
+                <br>
+                {% if listing.isActive %}
+                    <h5>Interested in this item? Place a bid!</h5>
+                    <form action="{% url 'listing' listing.id %}" method="POST">
+                        <div class="row">
+                            {% for field in placebid_form %}
+                                {% csrf_token %}
+                                <div class="col-6">
+                                    {{field}}
+                                </div>
+                            {% endfor %}
+                            <div class="col-6">
+                                <input class="btn btn-primary" type="submit" value="Place bid">
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+                {% if user == listing.owner %}
+                    {% if listing.isActive == True %}
+                    <div class="close-auction">
+                        <form action="{% url 'listing' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <input name="close_auction" value="True" hidden>
+                            <input class="btn btn-danger" type="submit" value="Close Auction">
+                        </form>
+                    </div>
+                    {% endif %}
+                {% endif %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="row">
+                            {% if message.tags == 'success' %}
+                                <div class="alert alert-success">
+                                    {{message}}
+                                </div>
+                            {% elif message.tags == 'error' %}
+                                <div class="alert alert-danger">
+                                    {{message}}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row comment-title">
+        <div class="col-auto">
+            <h4>Comments</h4>
+        </div>
+    </div>
+    <div class="row comments">
+        <div class="col-12">
+            <ul class="list-unstyled">
+                {% for comment in comments %}
+                    <li class="media">
+                        <img class="mr-3 comment-portrait" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png?20170328184010" alt="Generic placeholder image">
+                        <div class="media-body">
+                            {{ comment.comment }}
+                            <br>
+                            <i>- {{ comment.owner }} {{comment.created_date }}</i>
+
+                        </div>
+                    </li>
+                    <hr>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'listing' listing.id %}" method="POST">
+                {% csrf_token %}
+                {{comment_form}}
+                <input type="submit" class="btn btn-primary comment-submit">
+            </form>
+        </div>
+    </div> 
+    {% endif %}
+</div>
+{% endblock %}
